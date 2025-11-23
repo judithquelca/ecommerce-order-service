@@ -2,6 +2,7 @@ package dev.judyquelca.orderservice.service;
 
 import dev.judyquelca.orderservice.dto.OrderRequest;
 import dev.judyquelca.orderservice.dto.OrderResponse;
+import dev.judyquelca.orderservice.exception.OrderNotFoundException;
 import dev.judyquelca.orderservice.kafka.consumer.OrderEventConsumer;
 import dev.judyquelca.orderservice.kafka.event.OrderPlacedEvent;
 import dev.judyquelca.orderservice.kafka.producer.OrderEventProducer;
@@ -34,11 +35,6 @@ public class OrderService {
     public OrderResponse create(OrderRequest request) {
         // 1. Crear y guardar orden
         Order order = new Order();
-    /*order.setProductId(request.getProductId());
-    order.setQuantity(request.getQuantity());
-    order.setCustomerName(request.getCustomerName());
-    order.setCustomerEmail(request.getCustomerEmail());
-    order.setTotalAmount(request.getTotalAmount());*/
         OrderMapper.updateEntity(request, order);
         Order saved = orderRepository.save(order);
 
@@ -55,7 +51,6 @@ public class OrderService {
 
         // 3. Retornar respuesta
         return OrderMapper.toResponse(saved);
-        //return mapToResponse(saved);
     }
 
     // Resto de métodos sin cambios...
@@ -70,10 +65,7 @@ public class OrderService {
     @Transactional(readOnly = true)
     public OrderResponse findById(Long id) {
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
-        // Nota: En producción, crear OrderNotFoundException extends RuntimeException
-        // Ver Clase 3 para manejo de excepciones con @ControllerAdvice
-        //return mapToResponse(order);
+                .orElseThrow(() -> new OrderNotFoundException("Orden " + id + " no encontrado"));
         return OrderMapper.toResponse(order);
     }
 
@@ -86,7 +78,7 @@ public class OrderService {
         log.info("Confirming order: orderId={}", orderId);
 
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found: " + orderId));
+                .orElseThrow(() -> new OrderNotFoundException("Order no encontrado: " + orderId));
 
         // Verificar que la orden está en estado PENDING
         if (order.getStatus() != OrderStatus.PENDING) {
@@ -111,7 +103,7 @@ public class OrderService {
         log.info("Cancelling order: orderId={}, reason={}", orderId, reason);
 
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found: " + orderId));
+                .orElseThrow(() -> new OrderNotFoundException("Order no encontrada: " + orderId));
 
         // Verificar que la orden está en estado PENDING
         if (order.getStatus() != OrderStatus.PENDING) {
@@ -129,16 +121,4 @@ public class OrderService {
                 orderId, order.getStatus(), reason);
     }
 
-    /*private OrderResponse mapToResponse(Order order) {
-        OrderResponse response = new OrderResponse();
-        response.setId(order.getId());
-        response.setProductId(order.getProductId());
-        response.setQuantity(order.getQuantity());
-        response.setCustomerName(order.getCustomerName());
-        response.setCustomerEmail(order.getCustomerEmail());
-        response.setTotalAmount(order.getTotalAmount());
-        response.setStatus(order.getStatus());
-        response.setCreatedAt(order.getCreatedAt());
-        return response;
-    }*/
 }
