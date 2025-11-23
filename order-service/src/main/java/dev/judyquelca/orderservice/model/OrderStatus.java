@@ -1,4 +1,4 @@
-package dev.judyquelca.orderservice.model.entity;
+package dev.judyquelca.orderservice.model;
 
 public enum OrderStatus {
   PENDING,      // Orden creada, esperando validación

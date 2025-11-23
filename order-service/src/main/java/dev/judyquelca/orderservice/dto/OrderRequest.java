@@ -7,24 +7,25 @@ import java.math.BigDecimal;
 
 public record OrderRequest(
 
-        @NotNull
+        @NotNull(message = "{order.product.notblank}")
+        @Positive(message = "{order.product.positive}")
         Long productId,
 
-        @NotNull
-        @Positive
-        @Max(value = 100)
+        @NotNull(message = "{order.quantity.notblank}")
+        @Positive(message = "{order.quantity.positive}")
+        @Max(value = 100, message = "{order.quantity.max}")
         Integer quantity,
 
-        @NotBlank
-        @Size(min = 3, max = 100)
+        @NotBlank(message = "{order.name.notblank}")
+        @Size(min = 3, max = 100, message = "{order.name.min}")
         String customerName,
 
-        @NotBlank
-        @Email
+        @NotBlank(message = "{order.email.notblank}")
+        @Email(message = "{order.email.email}")
         String customerEmail,
 
-        @NotNull
-        @Positive
+        @NotNull(message = "{order.totalAmount.notblank}")
+        @Positive(message = "{order.totalAmount.positive}")
         BigDecimal totalAmount
 
 ) {

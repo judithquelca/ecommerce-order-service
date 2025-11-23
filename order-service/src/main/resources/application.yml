@@ -22,6 +22,10 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    properties:
+      spring.json.type.mapping:
+        orderPlacedEvent:dev.judyquelca.orderservice.kafka.event.OrderPlacedEvent
+
     consumer:
       group-id: order-service
       auto-offset-reset: earliest
@@ -31,7 +35,7 @@ spring:
         spring.json.type.mapping:
           orderConfirmedEvent:dev.judyquelca.orderservice.kafka.event.OrderConfirmedEvent,
           orderCancelledEvent:dev.judyquelca.orderservice.kafka.event.OrderCancelledEvent
-        spring.json.trusted.packages: dev.judyquelca.*
+        spring.json.trusted.packages: "*"
 
 server:
   port: ${SERVER_PORT:9081}

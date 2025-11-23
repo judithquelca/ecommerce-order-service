@@ -2,7 +2,7 @@ package dev.judyquelca.orderservice.mapper;
 
 import dev.judyquelca.orderservice.dto.OrderRequest;
 import dev.judyquelca.orderservice.dto.OrderResponse;
-import dev.judyquelca.orderservice.model.entity.Order;
+import dev.judyquelca.orderservice.model.Order;
 
 
 public final class OrderMapper {

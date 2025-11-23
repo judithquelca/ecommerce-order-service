@@ -1,10 +1,8 @@
 package dev.judyquelca.orderservice.dto;
 
-import dev.judyquelca.orderservice.model.entity.Order;
-import dev.judyquelca.orderservice.model.entity.OrderStatus;
+import dev.judyquelca.orderservice.model.OrderStatus;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 
 public record OrderResponse(
 
