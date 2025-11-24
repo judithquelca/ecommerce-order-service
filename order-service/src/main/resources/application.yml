@@ -10,7 +10,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: ${JPA_HIBERNATE_DDL_AUTO:create-drop}
     show-sql: true
     properties:
       hibernate:
@@ -38,7 +38,7 @@ spring:
         spring.json.trusted.packages: "*"
 
 server:
-  port: ${SERVER_PORT:9081}
+  port: ${SERVER_PORT:8081}
 
 logging:
   level:
